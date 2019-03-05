@@ -127,9 +127,9 @@
                         <Radio label="3" value="3">午休</Radio>
                         <Radio label="4" value="4">下午</Radio>
                         <Radio label="5" value="5">傍晚</Radio>
-                        <Radio label="5" value="6">睡前</Radio>
-                        <Radio label="5" value="7">晚睡</Radio>
-                        <Radio label="6" value="8">其它</Radio>
+                        <Radio label="6" value="6">睡前</Radio>
+                        <Radio label="7" value="7">晚睡</Radio>
+                        <Radio label="8" value="8">其它</Radio>
                     </RadioGroup>
                 </div>
 
