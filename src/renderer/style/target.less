@@ -1,0 +1,255 @@
+.Target-Left {
+    width: 342px;
+    height: 615px;
+    background: #fff;
+    margin-top: 0px;
+    display: inline-block;
+    float: left;
+    padding: 20px;
+    border-right: 1px solid #ddd;
+    box-shadow: 0 0 5px #ccc;
+    .Target-Left-DatePicker {
+        width: 312px;
+    }
+    #Target-left-timeSlot {
+        width: auto;
+        height: 545px;
+    }
+    .Target-Left-List {
+        width: 302px;
+        height: 30px;
+        line-height: 30px;
+        font-size: 14px;
+        padding: 5px 5px 5px 5px;
+        text-align: left;
+    }
+}
+
+.Target-Right {
+    width: 640px;
+    height: 615px;
+    background: #fff;
+    margin-top: 0px;
+    display: inline-block;
+    position: relative;
+    float: right;
+}
+
+.Target-Right-EndTime {
+    margin-bottom: 10px;
+    width: 640px;
+    height: 70px;
+    margin-top: 10px;
+    .Target-Right-EndTime-Label {
+        line-height: 35px;
+        text-align: left; // display: inline-block;
+        float: left;
+        margin-right: 10px;
+    }
+}
+
+.Target-Projection {
+    // margin-bottom: 10px;
+    text-align: left;
+    width: 640px;
+    height: 70px; // margin-top: 10px;
+    .Target-Projection-Label {
+        line-height: 35px; // text-align: left;
+        // display: inline-block;
+        // float: left;
+        // margin-right: 10px;
+    }
+}
+
+.Target-Right-Complete {
+    // margin-bottom: 20px;
+    height: 60px;
+    .Target-Right-Complete-Label {
+        line-height: 35px;
+        text-align: left;
+    }
+}
+
+.Target-Right-Category {
+    text-align: left;
+    height: 70px;
+    .Target-Right-Category-Label {
+        line-height: 35px;
+        text-align: left;
+    }
+    .Target-Right-Category-Select {
+        width: 610px;
+        float: left;
+    }
+    .Target-Right-Category-Icon {
+        font-size: 24px;
+        float: left;
+        margin-top: 5px;
+        margin-left: 10px;
+    }
+}
+
+.Target-Right-Header {
+    margin: 10px auto;
+    width: auto;
+    height: 50px;
+    background: #fff;
+    line-height: 50px;
+    font-size: 14px;
+}
+
+.Target-Right-Header-DatePicker {
+    width: 110px;
+    margin-bottom: 5px;
+}
+
+.Target-Right-Input-Ele {
+    width: auto;
+    height: auto;
+    background: #fff;
+    text-align: left;
+    margin-bottom: 10px;
+    h3 {
+        line-height: 35px;
+    }
+    input {
+        //width: 125px;
+        .ivu-input-icon {
+            margin-right: -5px;
+        }
+    }
+    .ivu-input:focus {
+        box-shadow: none;
+    } // .ivu-input-wrapper {
+    //     width: 70px;
+    // }
+    .ivu-input-icon-normal+.ivu-input {
+        border: none;
+        font-weight: bolder;
+        width: 70px;
+        padding: 0px;
+    }
+}
+
+.Target-Right-DoWhat {
+    .Target-Right-Input-Ele;
+    .Target-Right-DoWhat-TimeSlot input {
+        width: 60px;
+        font-weight: bolder;
+        text-align: center;
+        border: none;
+        padding: 0px; //margin-left: -15px;
+    }
+    .Target-Right-DoWhat-TimeSlot .ivu-input:focus {
+        box-shadow: none;
+    }
+}
+
+.Target-Right-Tag {
+    .Target-Right-Input-Ele;
+    .Target-Right-Tag-Search {
+        position: absolute;
+        background: #fff;
+        width: 550px;
+        height: 200px;
+        z-index: 999;
+        box-shadow: 5px 5px 2px #f5f5f5;
+    }
+    .Target-Right-Tag-Search-Item {
+        margin: 5px;
+        padding: 5px;
+    }
+}
+
+.now {
+    background-color: #f1f2f3;
+}
+
+.Target-Right-Attachment {
+    .Target-Right-Input-Ele;
+    .Target-Right-Attachment-Upload-List {
+        display: inline-block;
+        width: 60px;
+        height: 60px;
+        text-align: center;
+        line-height: 60px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        overflow: hidden;
+        background: #fff;
+        position: relative;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+        margin-right: 4px;
+        img {
+            width: 100%;
+            height: 100%;
+        }
+    }
+    .Target-Right-Attachment-Upload-List-Cover {
+        display: none;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        cursor: pointer;
+        background: rgba(0, 0, 0, 0.6);
+        i {
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
+            margin: 0 2px;
+        }
+    }
+    .Target-Right-Attachment-Upload-List:hover .Target-Right-Attachment-Upload-List-Cover {
+        display: block;
+    }
+}
+
+.Target-tagModal {
+    padding: 10px;
+    width: 490px;
+    height: 213px;
+    background: #fff;
+    border-radius: 4px;
+    border-right: 1px solid #ddd;
+    box-shadow: 0 0 5px #ccc;
+    display: inline-block;
+}
+
+.inputStyle {
+    border: none;
+    font-size: 14px;
+    font-weight: bolder;
+    text-align: left;
+}
+
+.Target-Left-DatePicker .ivu-input {
+    .inputStyle;
+}
+
+.Target-Right-Header .ivu-input {
+    .inputStyle;
+}
+
+.Target-Left-DatePicker .ivu-input:focus {
+    box-shadow: none;
+}
+
+.Target-Right-Header .ivu-input:focus {
+    box-shadow: none;
+}
+
+.ivu-input {
+    font-size: 14px;
+}
+
+.Target-Right-DoWhat-Input {
+    display: inline-block;
+    width: 50px;
+    height: 32px;
+    padding: 0px 6px;
+    border: none;
+    font-weight: bolder;
+    font-size: 14px;
+}

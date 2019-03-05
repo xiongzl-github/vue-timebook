@@ -1,0 +1,47 @@
+.Face-DatePicker {
+    width: 110px;
+    text-align: center;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+.inputStyle {
+    border: none;
+    font-size: 14px;
+    font-weight: bolder;
+    text-align: left;
+}
+
+.Face-DatePicker .ivu-input {
+    .inputStyle;
+    font-size: 14px;
+}
+
+.Face-DatePicker .ivu-input:focus {
+    box-shadow: none;
+}
+
+#wrap {
+    width: 100%;
+    height: 500px;
+    position: relative;
+    margin-top: 50px;
+    /*一定要有以下样式，才会有3D的效果*/
+    /*把div变成3D的场景*/
+    transform-style: preserve-3d;
+    perspective: 1500px;
+}
+
+#wrap img {
+    /*对所有的图片进行设置样式*/
+    width: 400px;
+    height: 250px;
+    /*这里一定要设置为绝对定位*/
+    position: absolute;
+    /*calc()是一个计算函数  页面的宽度-容器宽度的一半*/
+    left: calc(50% - 200px);
+    top: calc(50% - 150px);
+    border-radius: 7px;
+    /*看到图片的运动过程*/
+    transition: 0.8s ease-in-out;
+}

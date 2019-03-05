@@ -1,0 +1,219 @@
+.TimeMachine-Left {
+    width: 342px;
+    height: 615px;
+    background: #fff;
+    margin-top: 0px;
+    display: inline-block;
+    float: left;
+    padding: 20px;
+    border-right: 1px solid #ddd;
+    box-shadow: 0 0 5px #ccc;
+    .TimeMachine-Left-DatePicker {
+        width: 312px;
+    }
+    #timeMachine-left-timeSlot {
+        width: auto;
+        height: 545px;
+    }
+    .TimeMachine-Left-List {
+        width: 302px;
+        height: 30px;
+        line-height: 30px;
+        font-size: 14px;
+        padding: 5px 5px 5px 5px;
+        text-align: left;
+    }
+}
+
+.TimeMachine-Right {
+    width: 640px;
+    height: 615px;
+    background: #fff;
+    margin-top: 0px;
+    display: inline-block;
+    position: relative;
+    float: right;
+}
+
+.TimeMachine-Right-Category {
+    text-align: left;
+    height: 70px;
+    .TimeMachine-Right-Category-Label {
+        line-height: 35px;
+        text-align: left;
+    }
+    .TimeMachine-Right-Category-Select {
+        width: 610px;
+        float: left;
+    }
+    .TimeMachine-Right-Category-Icon {
+        font-size: 24px;
+        float: left;
+        margin-top: 5px;
+        margin-left: 10px;
+    }
+}
+
+.TimeMachine-Right-Header {
+    margin: 10px auto;
+    width: auto;
+    height: 50px;
+    background: #fff;
+    line-height: 50px;
+}
+
+.TimeMachine-Right-Header-DatePicker {
+    width: 110px;
+    margin-bottom: 5px;
+}
+
+.TimeMachine-Right-Input-Ele {
+    width: auto;
+    height: auto;
+    background: #fff;
+    text-align: left;
+    margin-bottom: 10px;
+    h3 {
+        line-height: 35px;
+    }
+    input {
+        //width: 125px;
+        .ivu-input-icon {
+            margin-right: -5px;
+        }
+    }
+    .ivu-input:focus {
+        box-shadow: none;
+    } // .ivu-input-wrapper {
+    //     width: 70px;
+    // }
+    .ivu-input-icon-normal+.ivu-input {
+        border: none;
+        font-weight: bolder;
+        width: 70px;
+        padding: 0px;
+    }
+}
+
+.TimeMachine-Right-DoWhat {
+    .TimeMachine-Right-Input-Ele;
+    .TimeMachine-Right-DoWhat-TimeSlot input {
+        width: 60px;
+        font-weight: bolder;
+        text-align: center;
+        border: none;
+        padding: 0px; //margin-left: -15px;
+    }
+    .TimeMachine-Right-DoWhat-TimeSlot .ivu-input:focus {
+        box-shadow: none;
+    }
+}
+
+.TimeMachine-Right-Tag {
+    .TimeMachine-Right-Input-Ele;
+    .TimeMachine-Right-Tag-Search {
+        position: absolute;
+        background: #fff;
+        width: 550px;
+        height: 200px;
+        z-index: 999;
+        box-shadow: 5px 5px 2px #f5f5f5;
+    }
+    .TimeMachine-Right-Tag-Search-Item {
+        margin: 5px;
+        padding: 5px;
+    }
+}
+
+.now {
+    background-color: #f1f2f3;
+}
+
+.TimeMachine-Right-Attachment {
+    .TimeMachine-Right-Input-Ele;
+    .TimeMachine-Right-Attachment-Upload-List {
+        display: inline-block;
+        width: 60px;
+        height: 60px;
+        text-align: center;
+        line-height: 60px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        overflow: hidden;
+        background: #fff;
+        position: relative;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+        margin-right: 4px;
+        img {
+            width: 100%;
+            height: 100%;
+        }
+    }
+    .TimeMachine-Right-Attachment-Upload-List-Cover {
+        display: none;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        cursor: pointer;
+        background: rgba(0, 0, 0, 0.6);
+        i {
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
+            margin: 0 2px;
+        }
+    }
+    .TimeMachine-Right-Attachment-Upload-List:hover .TimeMachine-Right-Attachment-Upload-List-Cover {
+        display: block;
+    }
+}
+
+.timeMachine-tagModal {
+    padding: 10px;
+    width: 490px;
+    height: 213px;
+    background: #fff;
+    border-radius: 4px;
+    border-right: 1px solid #ddd;
+    box-shadow: 0 0 5px #ccc;
+    display: inline-block;
+}
+
+.inputStyle {
+    border: none;
+    font-size: 14px;
+    font-weight: bolder;
+    text-align: left;
+}
+
+.TimeMachine-Left-DatePicker .ivu-input {
+    .inputStyle;
+}
+
+.TimeMachine-Right-Header .ivu-input {
+    .inputStyle;
+}
+
+.TimeMachine-Left-DatePicker .ivu-input:focus {
+    box-shadow: none;
+}
+
+.TimeMachine-Right-Header .ivu-input:focus {
+    box-shadow: none;
+}
+
+.ivu-input {
+    font-size: 14px;
+}
+
+.TimeMachine-Right-DoWhat-Input {
+    display: inline-block;
+    width: 50px;
+    height: 32px;
+    padding: 0px 6px;
+    border: none;
+    font-weight: bolder;
+    font-size: 14px;
+}
