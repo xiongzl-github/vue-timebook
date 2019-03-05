@@ -590,7 +590,7 @@ export default {
                         this.$router.push("/home");
                         this.$store.state.home.home.activeName = "TimeMachine";
                         ipcRenderer.send("showWindow", count);
-                        this.getTimeSlotEnd();
+                        this.resetTimeMachine();
                         break;
                     }
                 }
