@@ -2,11 +2,32 @@ import * as dbUtil from "@/utils/dbUtil";
 import * as util from "@/utils/util";
 import * as timeMachineUtil from "@/utils/timeMachineUtil";
 import path from "path";
-import { remote } from "electron";
+import {
+    remote
+} from "electron";
 import types from "@/store/types.js";
-import { user } from "@/utils/userUtil";
+import {
+    user
+} from "@/utils/userUtil";
 import WebStorageCache from "web-storage-cache";
 var wsCache = new WebStorageCache();
+
+// 根据targetId 查询target 
+export function queryTargetById(targetId) {
+    // 查询此用户所拥有的所有tag
+    let resultList = [];
+    let sql = dbUtil.getSqlObj();
+    let userId = wsCache.get("user").id;
+    let sqlStr = "SELECT * from tbl_target WHERE userId = " + userId + " AND status = 1 AND id = $a";
+    let stmt = sql.prepare(sqlStr);
+    stmt.bind({
+        $a: targetId
+    });
+    stmt.step();
+    let targetObj = stmt.getAsObject();
+    sql.close();
+    return targetObj;
+}
 
 // 更新目标
 export function updateTarget(target, timeMachine, thisObj) {
@@ -36,9 +57,13 @@ export function updateTarget(target, timeMachine, thisObj) {
     try {
         sql.run(sqlStr);
         dbUtil.writeDataToDB(sql);
-        thisObj.$Message.success({ content: "更新成功!" });
+        thisObj.$Message.success({
+            content: "更新成功!"
+        });
     } catch (error) {
-        thisObj.$Message.error({ content: "更新失败!" });
+        thisObj.$Message.error({
+            content: "更新失败!"
+        });
     }
 }
 
@@ -56,9 +81,13 @@ export function deleteTargetById(id, thisObj) {
     try {
         sql.run(sqlStr);
         dbUtil.writeDataToDB(sql);
-        thisObj.$Message.success({ content: "删除成功!" });
+        thisObj.$Message.success({
+            content: "删除成功!"
+        });
     } catch (error) {
-        thisObj.$Message.error({ content: "删除失败!" });
+        thisObj.$Message.error({
+            content: "删除失败!"
+        });
     }
 }
 
@@ -222,13 +251,17 @@ export function checkSubmitTargetMethodParam(thisObj, timeMachine, target) {
     let endDate = target.endDate;
     let projection = target.projection;
     if ("" == targetStr) {
-        thisObj.$Message.warning({ content: "请输入一个目标!" });
+        thisObj.$Message.warning({
+            content: "请输入一个目标!"
+        });
     } else if ("" == projection) {
         thisObj.$Message.warning({
             content: "请输入一个规划"
         });
     } else if ("" == tagIds) {
-        thisObj.$Message.warning({ content: "请输入一个标签" });
+        thisObj.$Message.warning({
+            content: "请输入一个标签"
+        });
     } else {
         result = false;
     }

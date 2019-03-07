@@ -2,6 +2,7 @@ import * as dbUtil from "@/utils/dbUtil";
 import * as util from "@/utils/util";
 import * as timeMachineUtil from "@/utils/timeMachineUtil";
 import * as todolistUtil from "@/utils/todolistUtil";
+import * as targetUtil from "@/utils/targetUtil";
 import path from "path";
 import {
     remote
@@ -836,6 +837,19 @@ export function getTodolistByDate(thisObj, dashboard, type) {
         thisObj.$Message.error({
             content: "系统异常==============10==================!"
         });
+    }
+
+    // 删除因为target临时变动而涉及的todolist
+    for (let i = result.length - 1; i >= 0; i--) {
+        let ele = result[i];
+        let targetId = ele.targetId;
+        if (targetId != 0 && targetId != undefined) {
+            // 根据targetId查询target 
+            let target = targetUtil.queryTargetById(targetId);
+            if (target.projection == 2) {
+                result.splice(i, 1);
+            }
+        }
     }
 
     // 设置时间的完成状态
