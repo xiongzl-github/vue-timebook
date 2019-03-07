@@ -18,7 +18,7 @@ export function getTimeMachineDetailByTodolistId(timeMachine) {
     let userId = wsCache.get("user").id;
     let tags = [];
     let sqlStr =
-        "SELECT	b.* FROM	(		SELECT			*		FROM			tbl_todolist		WHERE			id = $a	) AS a LEFT JOIN (	SELECT		max(progress),		c.* 	FROM		tbl_timeMachine AS c	WHERE		userId = 1	AND status = 1	GROUP BY		todolistId) AS b ON a.id = b.todolistId WHERE a.repeatType = 0 OR SUBSTR(b.curDateTime, 1, 10) = $b";
+        "SELECT	b.* FROM	(		SELECT			*		FROM			tbl_todolist		WHERE			id = $a	) AS a LEFT JOIN (	SELECT		max(progress),		c.* 	FROM		tbl_timeMachine AS c	WHERE		userId = 1	AND status = 1	GROUP BY		todolistId) AS b ON a.id = b.todolistId WHERE a.repeatType = 0 and SUBSTR(b.curDateTime, 1, 10) = $b";
     let stmt = sql.prepare(sqlStr);
     stmt.bind({ $a: todolistId, $b: date });
     stmt.step();
