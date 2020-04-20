@@ -93,7 +93,7 @@ export function DBExists() {
     var sql = require("sql.js");
     let pathStr = path.join(remote.app.getPath("userData"));
     let dirs = [];
-    let parentDir = pathStr + "\\databases";
+    let parentDir =  path.normalize(pathStr + "/databases");
     fs.exists(parentDir, function(exists) {
         if (!exists) {
             fs.mkdir(parentDir, function(err) {
@@ -107,10 +107,10 @@ export function DBExists() {
                 var buffer = new Buffer(binaryArray);
                 var dbpath = path.join(
                     remote.app.getPath("userData"),
-                    "/databases/sql.db"
+                    "/databases/"
                 );
                 fs.writeFileSync(dbpath, buffer);
-            }, 100);
+            }, 10);
         }
     });
 }
@@ -361,15 +361,18 @@ export function initDBTables() {
                 "CREATE TABLE tbl_target (" +
                 " id   INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                 " userId   INTEGER NOT NULL," +
+                " theme   TEXT NOT NULL," +
                 " target   TEXT NOT NULL," +
-                " projection   TEXT," +
-                " tagIds   TEXT NOT NULL," +
-                " complete   TEXT," +
-                " updateTime   TEXT NOT NULL," +
+                " period   INTEGER," +
+                " planning   TEXT," +
+                " priority   TEXT," +
+                " availableTime INTEGER," +
+                " pid   INTEGER," +
+                " consumeTime   INTEGER," +
+                " deadline   TEXT," +
+                " isCompleted   TEXT," +
+                " updateTime   TEXT," +
                 " curDateTime   TEXT NOT NULL," +
-                " endDate   TEXT," +
-                " realEndDate   TEXT," +
-                " reasonIds   TEXT," +
                 " syncStatus   INTEGER NOT NULL," +
                 " status   INTEGER NOT NULL," +
                 " show   INTEGER default 1" +

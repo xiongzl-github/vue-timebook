@@ -12,6 +12,129 @@ import {
 import WebStorageCache from "web-storage-cache";
 var wsCache = new WebStorageCache();
 
+
+
+
+export function queryDoingTarget(target, thisObj){
+    // 查询此用户所拥有的所有tag
+    let resultList = [];
+    let sql = dbUtil.getSqlObj();
+    let userId = wsCache.get("user").id;
+    let sqlStr = "SELECT * from tbl_target WHERE userId = " + userId + " AND status = 1 AND isCompleted = 0 AND pid = 0 AND planning = 1";
+    let stmt = sql.prepare(sqlStr);
+    stmt.step();
+    let targetObj = stmt.getAsObject();
+    console.log("queryDoingTarget");
+    console.log(targetObj);
+    sql.close();
+    return targetObj;
+}
+
+export function checkAddTargetMethodParam(target, thisObj){
+    if(this.target.theme == ''){
+        this.$Message.warning({
+            content: "请输入一个主题!"
+        });
+        return false;
+    } else if (this.target.target == '') {
+        this.$Message.warning({
+            content: "请输入一个目标!"
+        });
+        return false;
+    } else {
+        return true;
+    }
+}
+
+// 添加目标
+export function addTarget(target, thisObj){
+    // 校验参数时候正确
+    let result = checkAddTargetMethodParam(target, thisObj);
+    if (!result){
+        return;
+    }
+    // 首先提交父任务, 获取 pid
+    result = exeAddTarget(target, thisObj);
+    if (result) {
+        target.childTargets.forEach(ele => {
+            ele.pid = result;
+            ele.deadline = target.deadline;
+            ele.theme = target.theme;
+            exeAddTarget(ele, thisObj);
+        });
+        thisObj.$Message.success({
+            content: "添加成功!"
+        });
+    }
+}
+
+export function exeAddTarget(target, thisObj) {
+    // 插入一个目标
+    let curDateTime = new Date().format("yyyy-MM-dd hh:mm:ss");
+    let updateTime = curDateTime;
+    let deadline = '';
+    if(target.deadline != '') {
+        deadline = deadline = util.dateForMat("yyyy-MM-dd", new Date(target.deadline));
+    }
+    var sql = dbUtil.getSqlObj();
+    let sqlstr =
+        "INSERT INTO tbl_target(userId, theme, target, period, planning, priority, availableTime, pid, consumeTime, deadline, isCompleted,  curDateTime, updateTime, syncStatus, status, show) VALUES (" +
+        wsCache.get("user").id +
+        ", '" +
+        target.theme +
+        "', '" +
+        target.target +
+        "', " +
+        target.period +
+        ", '" +
+        target.planning +
+        "', '" +
+        target.priority +
+        "', " +
+        target.availableTime +
+        ", " +
+        target.pid +
+        ", " +
+        target.consumeTime +
+        ", '" +
+        deadline +
+        "', '" +
+        target.isCompleted +
+        "', '" +
+        curDateTime +
+        "', '" +
+        updateTime +
+        "', " +
+        target.syncStatus +
+        ", " +
+        target.status +
+        ", " +
+        target.show +
+        ")";
+    try {
+        sql.exec(sqlstr);
+        let result = getLastInsertRowId(sql);
+        dbUtil.writeDataToDB(sql);
+        return result;
+    } catch (error) {
+        thisObj.$Message.error({
+            content: "添加失败!"
+        });
+        return false;
+    }
+} 
+
+// 获取最近插入的rowid
+export function getLastInsertRowId(sql) {
+    let sqlStr = "select last_insert_rowid()";
+    let tempRes = sql.exec(sqlStr);
+    tempRes = tempRes[0].values[0][0];
+    return tempRes;
+}
+
+
+// ===========================================================
+
 // 根据targetId 查询target 
 export function queryTargetById(targetId) {
     // 查询此用户所拥有的所有tag

@@ -192,6 +192,17 @@ const UPDATETARGET = "updateTarget";
 const RESETTARGET = "resetTarget";
 const SHOWTARGET = "showTarget";
 const HIDDENTARGET = "hiddenTarget";
+const ADDCHILDTARGET = "addChildTarget";
+const ADDCHECKPOINT = "addCheckPoint";
+const DELETECHECKPOINT = "deleteCheckPoint";
+const VIEWCHECKPOINTDETAIL = 'viewCheckPointDetail';
+const SHOWCHILDTARGETMODAL = 'showChildTargetModal';
+const RESETCHILDTARGET = 'resetChildTarget';
+const VIEWCHILDTARGETDETAIL = 'viewChildTargetDetail';
+const ADDTARGET = 'addTarget';
+const QUERYDOINGTARGET = 'queryDoingTarget';
+const QUERYTODOTARGET = 'queryToDoTarget';
+const QUERYDONETARGET = 'queryDoneTarget';
 // target end
 
 // voice start
@@ -482,7 +493,17 @@ export default {
     RESETTARGET,
     HIDDENTARGET,
     SHOWTARGET,
-
+    ADDCHILDTARGET,
+    ADDCHECKPOINT,
+    DELETECHECKPOINT,
+    VIEWCHECKPOINTDETAIL,
+    SHOWCHILDTARGETMODAL,
+    RESETCHILDTARGET,
+    VIEWCHILDTARGETDETAIL,
+    ADDTARGET,
+    QUERYDOINGTARGET,
+    QUERYTODOTARGET,
+    QUERYDONETARGET,
     // target end
 
     // timeMachine 相关方法 start

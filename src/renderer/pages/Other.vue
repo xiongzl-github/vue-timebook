@@ -264,6 +264,11 @@
                 </div>
             </Modal>
         </TabPane>
+        <TabPane name="test" label="测试" icon="android-create">
+            <h1>hello world</h1>
+            <Button v-on:click="testCmd" style="margin:35px 0 0 395px" type="success">确定</Button>
+
+        </TabPane>
 
     </Tabs>
 </template>
@@ -274,7 +279,10 @@ import { mavonEditor } from "mavon-editor";
 import "mavon-editor/dist/css/index.css";
 import * as util from "@/utils/util.js";
 import * as mottoUtil from "@/utils/mottoUtil.js";
-
+import cmd from "node-cmd";
+// import jvm from "node-jvm"
+// import newman from "newman";
+// var newman = require('newman');
 export default {
     data() {
         return {};
@@ -312,6 +320,73 @@ export default {
     },
 
     methods: {
+        testCmd() {
+            // this.test03();
+            // this.test04('cd E:\\project\\testNG-demo && mvn test');
+            this.test04('java -jar E:\\project\\jmeter-demo\\target\\demo-0.0.1-SNAPSHOT.jar');
+        },
+        test04(cmd) {
+            var exec = require("child_process").exec;
+            exec(cmd, function(error, stdout, stderr) {
+                console.log(stdout);
+                console.log(stderr);
+                if (error) {
+                    console.error(error);
+                } else {
+                    console.log("success");
+                }
+            });
+        },
+        test01() {
+            let command = "ping www.baidu.com";
+            let command02 = "java -version";
+            cmd.get(command, function(err, data, stderr) {
+                console.log(data);
+            });
+            cmd.run(command);
+        },
+        test03() {
+            const newman = require("newman");
+            let collectionPath =
+                "D:\\Passing Postman collection.postman_collection.json";
+            let envPath = "D:\\trello.postman_environment.json";
+            newman
+                .run(
+                    {
+                        collection:
+                            "https://api.getpostman.com/collections/246153-4c7e6507-6f2d-42db-82a5-9328078f61ef?apikey=PMAK-5d8034d87a54e3002adb4169-240a7afbea6445b972458ee8e8a54ba88b",
+                        environment:
+                            "https://api.getpostman.com/environments/246153-39b2af0a-1c86-401a-9a5b-f39e939875af?apikey=PMAK-5d8034d87a54e3002adb4169-240a7afbea6445b972458ee8e8a54ba88b",
+                        // collection: require('./Passing Postman collection.postman_collection.json'),
+                        // environment: require('./trello.postman_environment.json'),
+                        reporters: "cli"
+                    },
+                    function(err) {
+                        if (err) {
+                            throw err;
+                        }
+                        console.log("collection run complete!");
+                    }
+                )
+                .on("request", function() {
+                    console.log(arguments[1].response);
+                    console.log(arguments[1].request);
+                })
+                .on("done", function() {});
+        },
+        test02() {
+            // var JVM = require("node-jvm");
+            // var jvm = new JVM();
+            // jvm.setLogLevel(7);
+            // var entryPointClassName = jvm.loadJarFile(
+            //     "demo-0.0.1-SNAPSHOT.jar"
+            // );
+            // jvm.setEntryPointClassName(entryPointClassName);
+            // jvm.on("exit", function(code) {
+            //     process.exit(code);
+            // });
+            // jvm.run([15]);
+        },
         closeApiDetailModal(flag) {
             if (!flag) {
                 this.$store.dispatch({
