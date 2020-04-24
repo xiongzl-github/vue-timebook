@@ -20,23 +20,25 @@ export function queryDoingTarget(target, thisObj){
     let resultList = [];
     let sql = dbUtil.getSqlObj();
     let userId = wsCache.get("user").id;
-    let sqlStr = "SELECT * from tbl_target WHERE userId = " + userId + " AND status = 1 AND isCompleted = 0 AND pid = 0 AND planning = 1";
+    let sqlStr = "SELECT * from tbl_target WHERE userId = " + userId + " AND status = 1 AND isCompleted = 0 AND pid = 0 AND planning = 1 ORDER BY priority asc";
     let stmt = sql.prepare(sqlStr);
-    stmt.step();
-    let targetObj = stmt.getAsObject();
+    while (stmt.step()) {
+        let targetObj = stmt.getAsObject();
+        resultList.push(targetObj);
+    }
     console.log("queryDoingTarget");
-    console.log(targetObj);
+    console.log(resultList);
     sql.close();
-    return targetObj;
+    return resultList;
 }
 
-export function checkAddTargetMethodParam(target, thisObj){
-    if(this.target.theme == ''){
+export function checkAddTargetMethodParam(theme, thisObj){
+    if(theme.theme == ''){
         this.$Message.warning({
             content: "请输入一个主题!"
         });
         return false;
-    } else if (this.target.target == '') {
+    } else if (theme.target == '') {
         this.$Message.warning({
             content: "请输入一个目标!"
         });
@@ -47,9 +49,16 @@ export function checkAddTargetMethodParam(target, thisObj){
 }
 
 // 添加目标
-export function addTarget(target, thisObj){
+export function addTarget(state, thisObj){
+    let target = state.target;
+    let period = state.period;
+    let theme = state.theme;
+    console.log(target);
+    console.log(period);
+    console.log(theme);
+    return ;
     // 校验参数时候正确
-    let result = checkAddTargetMethodParam(target, thisObj);
+    let result = checkAddTargetMethodParam(theme, thisObj);
     if (!result){
         return;
     }

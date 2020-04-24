@@ -6,30 +6,22 @@
                 <div class="Target-Left">
                     <div style="width:auto;height:45px">
                         <ButtonGroup style="float:left">
-                            <Button @click="queryDoingTarget" style="border-radius:0;width:101px" :type="target.doingStyle">Doing</Button>
+                            <Button @click="queryDoingTarget()" style="border-radius:0;width:101px" :type="target.doingStyle">Doing</Button>
                             <Button style="border-radius:0;width:100px" :type="target.todoStyle">ToDo</Button>
                             <Button style="border-radius:0;width:101px" :type="target.doneStyle">Done</Button>
                         </ButtonGroup>
                     </div>
                     <div id="Target-Left-TimeLine" style="width:302px; padding:8px;text-align:left;height:555px;">
                         <Timeline style="width:auto;height:545px;">
-                            <TimelineItem v-for="(item, index) in target.targets" :key="index" style="width:292px;height:auto;">
-                                <div style="display:inline-block">
-                                    <p class="content" style="display:inline-block;width:230px;font-weight:bolder">
-                                        <Tag v-for="(tag,key) in item.tags" :key="key">{{tag.tagName}}</Tag>
-                                        <span v-if="item.dayNum >= 0">( 还剩
-                                            <span style="color:red">{{item.dayNum}}</span> 天 )</span>
-                                        <span v-if="item.dayNum < 0">( 延期
-                                            <span style="color:red">{{item.absDayNum}}</span> 天 )</span>
-                                    </p>
-                                    <p class="content" v-on:click="setTargetInfo(index)" :title="item.target" style="display:inline-block;width:230px;cursor:pointer">
-                                        {{item.target}}
-                                    </p>
-                                    <span style="float:right;display:inline-block" v-on:click="deleteTargetById(item.id)">
-                                        <Icon style="display:inline;font-size:18px;margin-right:15px;" type="close-circled"></Icon>
-                                    </span>
-                                </div>
-                            </TimelineItem>
+                            <span v-if='target.doingStyle == "primary"'>
+                                
+                            </span>
+                            <span v-if='target.todoStyle == "primary"'>
+
+                            </span>
+                            <span v-if='target.doneStyle == "primary"'>
+
+                            </span>
                         </Timeline>
                     </div>
                 </div>
@@ -37,12 +29,12 @@
                 <div class="TimeMachine-Right">
                     <div class="TimeMachine-Right-Header">
                         <strong>目标清单</strong>
-                        <DatePicker class="TimeMachine-Right-Header-DatePicker" type="date" v-model="target.curDateTime"></DatePicker>
+                        <DatePicker class="TimeMachine-Right-Header-DatePicker" type="date" v-model="period.curDateTime"></DatePicker>
                     </div>
 
                     <div class="Target-Steps">
                         <template>
-                            <Steps :current=target.current>
+                            <Steps :current=theme.current>
                                 <span style="cursor:pointer" @click="nextStep(0)"><Step title="第一步" content="请写出你的目标"></Step></span>
                                 <span style="cursor:pointer" @click="nextStep(1)"><Step title="第二步" content="分解你的目标吧"></Step></span>
                                 <span style="cursor:pointer" @click="nextStep(2)"><Step title="第三步" content="去完成你的目标吧"></Step></span>
@@ -53,19 +45,19 @@
                     <div id="Target-Step-First" class="Target-Step" style="display:block">
                         <div style="width:auto;height:35px;margin-bottom:10px">
                             <h3 style="line-height:35px;display:inline-block;float:left;margin-right:10px;width:90px;text-align:right">主题: </h3>
-                            <Input v-model="target.theme" style="width: 510px;float:left"/>
+                            <Input v-model="theme.theme" style="width: 510px;float:left"/>
                         </div>
                         <div style="width:auto;height:35px;margin-bottom:10px">
                             <h3 style="line-height:35px;display:inline-block;float:left;margin-right:10px;width:90px;text-align:right">目标: </h3>
-                            <Input v-model="target.target" style="width: 510px;float:left"/>
+                            <Input v-model="theme.target" style="width: 510px;float:left"/>
                         </div>
                         <div style="width:auto;height:35px;margin-bottom:10px">
                             <h3 style="line-height:35px;display:inline-block;float:left;margin-right:10px;width:90px;text-align:right">期数: </h3>
-                            <InputNumber :readonly="true" v-model="target.period" style="width: 510px;float:left"/>
+                            <InputNumber :readonly="true" v-model="period.period" style="width: 510px;float:left"/>
                         </div>
                         <div style="width:auto;height:35px;">
                             <h3 style="line-height:35px;display:inline-block;float:left;margin-right:10px;">每天可用时间: </h3>
-                            <InputNumber v-model="target.availableTime" style="width: 170px;float:left">
+                            <InputNumber v-model="period.availableTime" style="width: 170px;float:left">
                                 <span slot="append">hour</span>
                             </InputNumber>
                             <Button @click="setTime(0.5, 1, 0)" type="info" shape="circle">0.5H</Button>
@@ -77,7 +69,7 @@
                         </div>
                         <div style="width:auto;height:35px;">
                             <h3 style="line-height:35px;display:inline-block;float:left;margin-right:10px;width:90px;text-align:right">优先级: </h3>
-                            <RadioGroup v-model="target.priority" style="float:left ;font-size: 22px;font-weight: 500;">
+                            <RadioGroup v-model="period.priority" style="float:left ;font-size: 22px;font-weight: 500;">
                                 <Radio label="1" value="1">重要且紧急</Radio>
                                 <Radio label="2" value="2">紧急不重要</Radio>
                                 <Radio label="3" value="3">重要不紧急</Radio>
@@ -86,7 +78,7 @@
                         </div>
                         <div style="width:auto;height:35px;margin-bottom:10px">
                             <h3 style="line-height:35px;display:inline-block;float:left;margin-right:10px;width:90px;text-align:right">规划: </h3>
-                            <RadioGroup v-model="target.planning" style="float:left;font-size: 22px;font-weight: 500;">
+                            <RadioGroup v-model="period.planning" style="float:left;font-size: 22px;font-weight: 500;">
                                 <Radio label="1" value="1">马上做</Radio>
                                 <Radio label="0" value="0">考虑中</Radio>
                             </RadioGroup>
@@ -131,23 +123,23 @@
                     <div id="Target-Step-Third" style="display:none" class="Target-Step">
                         <div style="width:auto;height:35px;margin-bottom:10px">
                             <h3 style="line-height:35px;display:inline-block;float:left;margin-right:10px;width:90px;text-align:right">主题: </h3>
-                            <Input v-model="target.theme" style="width: 510px;float:left"/>
+                            <Input v-model="theme.theme" style="width: 510px;float:left"/>
                         </div>
                         <div style="width:auto;height:35px;margin-bottom:10px">
                             <h3 style="line-height:35px;display:inline-block;float:left;margin-right:10px;width:90px;text-align:right">目标: </h3>
-                            <Input v-model="target.target" style="width: 510px;float:left"/>
+                            <Input v-model="theme.target" style="width: 510px;float:left"/>
                         </div>
                         <div style="width:auto;height:35px;margin-bottom:10px">
                             <h3 style="line-height:35px;display:inline-block;float:left;margin-right:10px;width:90px;text-align:right">期数: </h3>
-                            <InputNumber :readonly="true" v-model="target.period" style="width: 510px;float:left"/>
+                            <InputNumber :readonly="true" v-model="period.period" style="width: 510px;float:left"/>
                         </div>
                         <div style="width:auto;height:35px;">
                             <h3 style="line-height:35px;display:inline-block;float:left;margin-right:10px;">每天可用时间: </h3>
-                            <InputNumber v-model="target.availableTime" style="width: 510px;float:left"/>
+                            <InputNumber v-model="period.availableTime" style="width: 510px;float:left"/>
                         </div>
                         <div style="width:auto;height:35px;">
                             <h3 style="line-height:35px;display:inline-block;float:left;margin-right:10px;width:90px;text-align:right">优先级: </h3>
-                            <RadioGroup v-model="target.priority" style="float:left;font-size: 22px;font-weight: 500;">
+                            <RadioGroup v-model="period.priority" style="float:left;font-size: 22px;font-weight: 500;">
                                 <Radio label="1" value="1">重要且紧急</Radio>
                                 <Radio label="2" value="2">紧急不重要</Radio>
                                 <Radio label="3" value="3">重要不紧急</Radio>
@@ -156,7 +148,7 @@
                         </div>
                         <div style="width:auto;height:35px;margin-bottom:10px">
                             <h3 style="line-height:35px;display:inline-block;float:left;margin-right:10px;width:90px;text-align:right">规划: </h3>
-                            <RadioGroup v-model="target.planning" style="float:left;font-size: 22px;font-weight: 500;">
+                            <RadioGroup v-model="period.planning" style="float:left;font-size: 22px;font-weight: 500;">
                                 <Radio label="1" value="1">马上做</Radio>
                                 <Radio label="0" value="0">考虑中</Radio>
                             </RadioGroup>
@@ -172,12 +164,12 @@
                         <div style="width:auto;height:35px;">
                             <h3 style="line-height:35px;display:inline-block;float:left;margin-right:10px;width:90px;text-align:right">截止时间: </h3>
                             <div style="float:left;">
-                                <DatePicker v-model="target.deadline" type="date" size="default" format="yyyy-MM-dd" style="width: 510px"></DatePicker>
+                                <DatePicker placement="top-start" v-model="period.deadline" type="date" size="default" format="yyyy-MM-dd" style="width: 510px"></DatePicker>
                             </div>
                         </div>
                         <div style="width:auto;height:35px;margin-bottom:10px">
                             <h3 style="line-height:35px;display:inline-block;float:left;margin-right:10px;width:90px;text-align:right">是否完成: </h3>
-                            <RadioGroup v-model="target.isCompleted" style="float:left;font-size: 22px;font-weight: 500;">
+                            <RadioGroup v-model="period.isCompleted" style="float:left;font-size: 22px;font-weight: 500;">
                                 <Radio label="1" value="1">是</Radio>
                                 <Radio label="0" value="0">否</Radio>
                             </RadioGroup>
@@ -198,11 +190,14 @@
                             </Button>
                             <Button v-on:click="resetTarget">reset</Button>
 
-                            <Modal id="childTargetModal" :mask-closable="false" v-model="target.childTargetsModal" :styles="{top: '300px'}" title="子目标详情!">
+                            <Modal id="childTargetModal" :mask-closable="false" v-model="theme.childTargetsModal" :styles="{top: '300px'}" title="子目标详情!">
                                 <div style="width:488px;height:335px;">
-                                    <h3 style="line-height:35px; text-align:center;width:488px">子目标</h3>
+                                    <h3 style="line-height:35px; text-align:center;width:488px;font-weight:16px">子目标</h3>
                                     <div style="width:488px;height:300px" id="Target-ChildTargetModal">
-                                        <span style="font-size:14px; display:block; width:488px" v-for="(item, index) in childTargets" :key="index">{{index + 1}}. {{item.target}}</span>
+                                        <span style="font-size:14px; display:block; width:488px; font-weight:500;margin-bottom:10px" v-for="(item, index) in childTargets" :key="index">
+                                            <span>{{index + 1}}. {{item.target}}</span>
+                                            <span style="float:right">{{item.consumeTime}}H</span>
+                                        </span>
                                     </div>
                                 </div>
                             </Modal>
@@ -226,10 +221,11 @@ import { setInterval } from "timers";
 
 export default {
     computed: {
-        ...mapGetters(["target", "childTarget", "childTargets", "timeMachine"])
+        ...mapGetters(["target", "childTarget", "childTargets", "timeMachine", 'theme', 'period', 'periodTarget'])
     },
     data() {
         return {   
+            
         };
     },
 
@@ -250,11 +246,11 @@ export default {
             this.target.childTargets.splice(index, 1);
         },
         showChildTargetDetail(){
-            this.target.childTargetsModal = true;
+            this.theme.childTargetsModal = true;
         },
         setTime(value, type, index){
             if (type == 1) {
-                this.target.availableTime = value;
+                this.period.availableTime = value;
             } else if (type == 2) {
                 this.target.childTargets[index].consumeTime = value;
             }
@@ -268,7 +264,7 @@ export default {
                 type: 'resetChildTarget',
                 thisObj: this
             })
-            this.nextStep(this.target.current)
+            this.nextStep(this.theme.current)
         },
         // 关闭检查点弹框
         closeCheckPointModal(){
@@ -276,7 +272,7 @@ export default {
             this.childTarget.uuid = '';
             this.checkPoint.checkPoint = '';
             this.childTarget.target = '';
-            this.nextStep(this.target.current);
+            this.nextStep(this.theme.current);
         },
         // 删除检查点
         deleteCheckPoint(index) {
@@ -319,12 +315,12 @@ export default {
         },
         nextStep(step){
             if(step == 0) {
-                this.target.current = step;
+                this.theme.current = step;
                 document.getElementById("Target-Step-First").style.display = "block";
                 document.getElementById("Target-Step-Second").style.display = "none";
                 document.getElementById("Target-Step-Third").style.display = "none";
             } else if(step == 1) {
-                this.target.current = step;
+                this.theme.current = step;
                 document.getElementById("Target-Step-First").style.display = "none";
                 document.getElementById("Target-Step-Second").style.display = "block";
                 document.getElementById("Target-Step-Third").style.display = "none";
@@ -342,13 +338,13 @@ export default {
                         content: "请输入子目标!"
                     });
                 } else {
-                    this.target.current = step;
+                    this.theme.current = step;
                     document.getElementById("Target-Step-First").style.display = "none";
                     document.getElementById("Target-Step-Second").style.display = "none";
                     document.getElementById("Target-Step-Third").style.display = "block";
                     this.childTargets.splice(0, this.childTargets.length);
                     this.target.totalTime = 0;
-                    this.target.deadline = '';
+                    this.period.deadline = '';
                     this.target.childTargets.forEach(ele => {
                         if(ele.target != '') {
                             this.childTargets.push(ele);
@@ -356,15 +352,15 @@ export default {
                         }
                     });
                     let days = 0;
-                    if (this.target.totalTime % this.target.availableTime == 0) {
-                        days = this.target.totalTime / this.target.availableTime;
+                    if (this.target.totalTime % this.period.availableTime == 0) {
+                        days = this.target.totalTime / this.period.availableTime;
                     } else {
-                        days = parseInt(this.target.totalTime / this.target.availableTime) + 1;
+                        days = parseInt(this.target.totalTime / this.period.availableTime) + 1;
                     }
                     let date = new Date();
                     date.setTime(date.getTime()+24*60*60*1000*days);
                     let tempDate = date.getFullYear()+"-" + (date.getMonth()+1) + "-" + date.getDate();
-                    this.target.deadline = tempDate;
+                    this.period.deadline = tempDate;
                 }
             }
         },
@@ -486,14 +482,15 @@ export default {
 
     mounted() {
         console.log("target mounted======================");
-        console.log(this.target.current);
+        console.log(this.theme.current);
         this.$Message.config({ top: 400, duration: 3 });
         Scrollbar.init(document.querySelector("#Target-Left-TimeLine"));
         Scrollbar.init(document.querySelector("#Target-Step-Third"));
         Scrollbar.init(document.querySelector("#Target-Step-Second-ChildTarget"));
         Scrollbar.init(document.querySelector("#Target-ChildTargetModal"));
-        if(this.target.current != 0) {
-            this.nextStep(this.target.current);
+        // this.queryDoingTarget();
+        if(this.theme.current != 0) {
+            this.nextStep(this.theme.current);
         }
     }
 };

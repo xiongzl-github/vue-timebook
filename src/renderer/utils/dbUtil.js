@@ -361,26 +361,80 @@ export function initDBTables() {
                 "CREATE TABLE tbl_target (" +
                 " id   INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                 " userId   INTEGER NOT NULL," +
-                " theme   TEXT NOT NULL," +
                 " target   TEXT NOT NULL," +
-                " period   INTEGER," +
-                " planning   TEXT," +
-                " priority   TEXT," +
-                " availableTime INTEGER," +
-                " pid   INTEGER," +
                 " consumeTime   INTEGER," +
-                " deadline   TEXT," +
-                " isCompleted   TEXT," +
                 " updateTime   TEXT," +
                 " curDateTime   TEXT NOT NULL," +
                 " syncStatus   INTEGER NOT NULL," +
                 " status   INTEGER NOT NULL," +
-                " show   INTEGER default 1" +
+                " themeId   INTEGER NOT NULL" +
                 ");";
             db.run(sqlstr);
         }
 
-        // 创建tbl_targetDetail表
+        // 创建tbl_theme表
+        sqlstr = "SELECT COUNT(*) FROM sqlite_master where type='table' and name='tbl_theme';";
+        result = db.exec(sqlstr);
+        if (result[0].values[0][0] == 0) {
+            flag = true;
+            sqlstr =
+                "CREATE TABLE tbl_theme (" +
+                " id   INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                " userId   INTEGER NOT NULL," +
+                " theme   TEXT NOT NULL," +
+                " target   TEXT NOT NULL," +
+                " updateTime   TEXT," +
+                " curDateTime   TEXT NOT NULL," +
+                " syncStatus   INTEGER NOT NULL," +
+                " status   INTEGER NOT NULL," +
+                ");";
+            db.run(sqlstr);
+        }
+
+    // 创建tbl_period表
+    sqlstr = "SELECT COUNT(*) FROM sqlite_master where type='table' and name='tbl_period';";
+    result = db.exec(sqlstr);
+    if (result[0].values[0][0] == 0) {
+        flag = true;
+        sqlstr =
+            "CREATE TABLE tbl_period (" +
+            " id   INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+            " userId   INTEGER NOT NULL," +
+            " period   INTEGER," +
+            " planning   TEXT," +
+            " priority   TEXT," +
+            " availableTime INTEGER," +
+            " themeId   INTEGER," +
+            " deadline   TEXT," +
+            " isCompleted   TEXT," +
+            " updateTime   TEXT," +
+            " curDateTime   TEXT NOT NULL," +
+            " syncStatus   INTEGER NOT NULL," +
+            " status   INTEGER NOT NULL," +
+            ");";
+        db.run(sqlstr);
+    }
+
+    // 创建tbl_period_target表
+    sqlstr = "SELECT COUNT(*) FROM sqlite_master where type='table' and name='tbl_period_target';";
+    result = db.exec(sqlstr);
+    if (result[0].values[0][0] == 0) {
+        flag = true;
+        sqlstr =
+            "CREATE TABLE tbl_period_target (" +
+            " id   INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+            " userId   INTEGER NOT NULL," +
+            " targetId   INTEGER," +
+            " periodId   INTEGER," +
+            " updateTime   TEXT," +
+            " curDateTime   TEXT NOT NULL," +
+            " syncStatus   INTEGER NOT NULL," +
+            " status   INTEGER NOT NULL," +
+            ");";
+        db.run(sqlstr);
+    }
+
+        // 创建tbl_reason表
         sqlstr =
             "SELECT COUNT(*) FROM sqlite_master where type='table' and name='tbl_reason';";
         result = db.exec(sqlstr);

@@ -5,46 +5,72 @@ import * as targetUtil from "@/utils/targetUtil";
 import { url } from "inspector";
 
 const state = {
-    childTarget:{
+    theme: {
         id: 0,
         userId: 0,
         theme: '',
         target: '',
-        period: 1,
-        planning: '1',
-        priority: '1',
-        availableTime: 0,
-        pid: 0,
-        consumeTime: 0,
-        totalTime: 0,
-        deadline: '',
-        isCompleted: 0,
         curDateTime: new Date(),
         updateTime: '',
         syncStatus: 0,
         status: 1,
-        show: 1
-    },
-    childTargets:[],
-    target: {
         childTargetsModal:false,
         doingStyle:'primary',
         todoStyle:'ghost',
         doneStyle:'ghost',
         current: 0,
+    },
+    period: {
         id: 0,
         userId: 0,
-        theme: '',      // 主题
+        period: 1,
+        planning: '1',
+        priority: '1',
+        availableTime: 0,
+        themeId: 0,
+        deadline: new Date(),
+        isCompleted: '0',
+        curDateTime: new Date(),
+        updateTime: '',
+        syncStatus: 0,
+        status: 1,
+        doingTargets:[],
+        todoTargets:[],
+        doneTargets:[],
+        
+    },
+    periodTarget: {
+        id: 0,
+        userId: 0,
+        targetId: 0,
+        periodId: 0,
+        curDateTime: new Date(),
+        updateTime: '',
+        syncStatus: 0,
+        status: 1
+    },
+    childTarget:{
+        id: 0,
+        userId: 0,
         target: '',     // 目标
-        period: 1,      // 期数
-        planning: '1',    // 规划
-        priority: '1',    // 优先级
-        availableTime: 0,   // 可利用时间
-        pid: 0,             // 父 ID
+        themeId: 0,             // 父 ID
         consumeTime: 0,     // 耗费时间
         totalTime: 0,       // 总耗时
-        deadline: '',       // 截止时间
-        isCompleted: '0',     // 是否完成
+        curDateTime: new Date(),    // 当前时间
+        updateTime: '',             // 更新时间
+        syncStatus: 0,              // 同步状态
+        status: 1,                  // 状态
+        show: 1,                    // 是否显示
+        childTargets:[]
+    },
+    childTargets:[],
+    target: {
+        id: 0,
+        userId: 0,
+        target: '',     // 目标
+        themeId: 0,             // 父 ID
+        consumeTime: 0,     // 耗费时间
+        totalTime: 0,       // 总耗时
         curDateTime: new Date(),    // 当前时间
         updateTime: '',             // 更新时间
         syncStatus: 0,              // 同步状态
@@ -55,6 +81,15 @@ const state = {
 };
 
 const getters = {
+    theme(state) {
+        return state.theme;
+    },
+    period(state) {
+        return state.period;
+    },
+    periodTarget(state) {
+        return state.periodTarget;
+    },
     target(state) {
         return state.target;
     },
@@ -109,18 +144,20 @@ const actions = {
         commit(types.VIEWCHILDTARGETDETAIL);
     },
     addTarget({commit, state}, obj){
-        targetUtil.addTarget(state.target, obj.thisObj);
+        targetUtil.addTarget(state, obj.thisObj);
     },
     queryDoingTarget({commit, state}, obj){
-        targetUtil.queryDoingTarget(state.target, obj.thisObj);
-        // commit(types.ADDTARGET);
+        let resultList = targetUtil.queryDoingTarget(state.target, obj.thisObj);
+        commit(types.QUERYDOINGTARGET, resultList);
     }
 };
 
 const mutations = {
+    [types.QUERYDOINGTARGET](state, data){
+        state.target.doingTargets = data;
+    },
     [types.ADDTARGET](state){
-        let target = state.target;
-        console.log(target);
+        // let target = state.target;
     },
     [types.ADDCHILDTARGET](state, data){
         let target = state.target;
