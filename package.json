@@ -61,7 +61,7 @@
     "html2canvas": "^1.0.0-alpha.12",
     "iview": "^2.11.0",
     "jimp": "^0.2.28",
-    "jquery": "^3.3.1",
+    "jquery": "^3.4.0",
     "jspdf": "^1.4.1",
     "less": "^3.0.1",
     "less-loader": "^4.1.0",
