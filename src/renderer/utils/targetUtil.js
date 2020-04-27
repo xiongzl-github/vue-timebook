@@ -53,34 +53,58 @@ export function addTarget(state, thisObj){
     let target = state.target;
     let period = state.period;
     let theme = state.theme;
+    let periodTarget = state.periodTarget;
     console.log(target);
     console.log(period);
     console.log(theme);
+    console.log(periodTarget);
+    if(!3) {
+        print("wanle");
+    }
     // 第一步: 校验参数
     let result = checkAddTargetMethodParam(theme, thisObj);
+    console.log("checkAddTargetMethodParam-->result: " + result + ".");
     if (!result){
         return;
     }
     // 第二步: 提交 theme
     var sql = dbUtil.getSqlObj();
-    result = exeAddTheme(theme, thisObj, sql);
+    let themeResult = exeAddTheme(theme, thisObj, sql);
+    console.log("exeAddTheme-->result: " + themeResult + ".");
+    let periodResult = false;
+    let targetResult = false;
+    let periodTargetResult = false;
     // 第三步: 提交 period
-    if(result) {
-        period.themeId = result;
-        target.themeId = result;
-        let flag = exeAddPeriod(period, thisObj, sql);
-        target.childTargets.forEach(ele => {
-            flag = exeAddTarget(ele, thisObj, sql);
-        });
-        if(flag) {
-            exeAddPeriodTarget();
+    if(themeResult) {
+        period.themeId = themeResult;
+        periodResult = exeAddPeriod(period, thisObj, sql);
+        console.log("exeAddPeriod-->result: " + periodResult + ".");
+        for (let index = 0; index < target.childTargets.length; index++) {
+            let obj = target.childTargets[index];
+            obj.themeId = themeResult;
+            targetResult = exeAddTarget(obj, thisObj, sql);
+            console.log("exeAddTarget-->result: " + targetResult + ".");
+            if (periodResult && targetResult) {
+                periodTarget.periodId = periodResult;
+                periodTarget.targetId = targetResult;
+                periodTargetResult = exeAddPeriodTarget(periodTarget, thisObj, sql);
+                console.log("exeAddPeriodTarget-->result: " + periodTargetResult + ".");
+                if(!periodTargetResult){
+                    break;
+                }
+            } else {
+                break;
+            }
         }
+    } else {
+        return ;
     }
-    dbUtil.writeDataToDB(sql);
-    thisObj.$Message.success({
-        content: "添加成功!"
-    });
-    return ;
+    if(periodResult && targetResult && periodTargetResult) {
+        dbUtil.writeDataToDB(sql);
+        thisObj.$Message.success({
+            content: "添加成功!"
+        });
+    }
 }
 
 
@@ -121,12 +145,11 @@ export function exeAddPeriod(period, thisObj, sql) {
     let curDateTime = new Date().format("yyyy-MM-dd hh:mm:ss");
     let updateTime = curDateTime;
     let deadline = '';
-    if(target.deadline != '') {
+    if(period.deadline != '') {
         deadline = deadline = util.dateForMat("yyyy-MM-dd", new Date(period.deadline));
     }
-    var sql = dbUtil.getSqlObj();
     let sqlstr =
-        "INSERT INTO tbl_target(userId, period, planning, priority, availableTime, themeId, deadline, isCompleted,  curDateTime, updateTime, syncStatus, status) VALUES (" +
+        "INSERT INTO tbl_period(userId, period, planning, priority, availableTime, themeId, deadline, isCompleted,  curDateTime, updateTime, syncStatus, status) VALUES (" +
         wsCache.get("user").id +
         ", " +
         period.period +
@@ -152,6 +175,7 @@ export function exeAddPeriod(period, thisObj, sql) {
         period.status +
         ")";
     try {
+        console.log("exeAddPeriod: " + sqlstr);
         sql.exec(sqlstr);
         return getLastInsertRowId(sql);
     } catch (error) {
@@ -168,30 +192,15 @@ export function exeAddTarget(target, thisObj, sql) {
     // 插入一个目标
     let curDateTime = new Date().format("yyyy-MM-dd hh:mm:ss");
     let updateTime = curDateTime;
-    var sql = dbUtil.getSqlObj();
     let sqlstr =
-        "INSERT INTO tbl_target(userId, theme, target, period, planning, priority, availableTime, pid, consumeTime, deadline, isCompleted,  curDateTime, updateTime, syncStatus, status, show) VALUES (" +
+        "INSERT INTO tbl_target(userId, target, themeId, consumeTime, curDateTime, updateTime, syncStatus, status) VALUES (" +
         wsCache.get("user").id +
         ", '" +
-        target.theme +
-        "', '" +
         target.target +
         "', " +
-        target.period +
+        target.themeId +
         ", '" +
-        target.planning +
-        "', '" +
-        target.priority +
-        "', " +
-        target.availableTime +
-        ", " +
-        target.pid +
-        ", " +
         target.consumeTime +
-        ", '" +
-        deadline +
-        "', '" +
-        target.isCompleted +
         "', '" +
         curDateTime +
         "', '" +
@@ -200,14 +209,42 @@ export function exeAddTarget(target, thisObj, sql) {
         target.syncStatus +
         ", " +
         target.status +
+        ")";
+    try {
+        console.log("exeAddTarget: " + sqlstr);
+        sql.exec(sqlstr);
+        return getLastInsertRowId(sql);
+    } catch (error) {
+        thisObj.$Message.error({
+            content: "添加失败!"
+        });
+        return false;
+    }
+} 
+
+export function exeAddPeriodTarget(periodTarget, thisObj, sql) {
+    // 插入一个目标
+    let curDateTime = new Date().format("yyyy-MM-dd hh:mm:ss");
+    let updateTime = curDateTime;
+    let sqlstr =
+        "INSERT INTO tbl_period_target(userId, targetId, periodId, curDateTime, updateTime, syncStatus, status) VALUES (" +
+        wsCache.get("user").id +
         ", " +
-        target.show +
+        periodTarget.targetId +
+        ", " +
+        periodTarget.periodId +
+        ", '" +
+        curDateTime +
+        "', '" +
+        updateTime +
+        "', " +
+        periodTarget.syncStatus +
+        ", " +
+        periodTarget.status +
         ")";
     try {
         sql.exec(sqlstr);
-        let result = getLastInsertRowId(sql);
-        dbUtil.writeDataToDB(sql);
-        return result;
+        return getLastInsertRowId(sql);
     } catch (error) {
         thisObj.$Message.error({
             content: "添加失败!"
