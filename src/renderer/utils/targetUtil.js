@@ -20,7 +20,8 @@ export function queryDoingTarget(target, thisObj){
     let resultList = [];
     let sql = dbUtil.getSqlObj();
     let userId = wsCache.get("user").id;
-    let sqlStr = "SELECT * from tbl_target WHERE userId = " + userId + " AND status = 1 AND isCompleted = 0 AND pid = 0 AND planning = 1 ORDER BY priority asc";
+    let sqlStr = "SELECT a.id AS themeId, a.theme, a.target, b.id AS periodId, b.period, b.priority FROM tbl_theme a LEFT JOIN tbl_period b ON a.id = b.themeId WHERE a.userId = " + userId + " and a.status = 1 AND b.status = 1 AND b.isCompleted = 0 AND b.planning = 1 ORDER BY b.priority asc";
+    console.log(sqlStr);
     let stmt = sql.prepare(sqlStr);
     while (stmt.step()) {
         let targetObj = stmt.getAsObject();
@@ -81,19 +82,21 @@ export function addTarget(state, thisObj){
         console.log("exeAddPeriod-->result: " + periodResult + ".");
         for (let index = 0; index < target.childTargets.length; index++) {
             let obj = target.childTargets[index];
-            obj.themeId = themeResult;
-            targetResult = exeAddTarget(obj, thisObj, sql);
-            console.log("exeAddTarget-->result: " + targetResult + ".");
-            if (periodResult && targetResult) {
-                periodTarget.periodId = periodResult;
-                periodTarget.targetId = targetResult;
-                periodTargetResult = exeAddPeriodTarget(periodTarget, thisObj, sql);
-                console.log("exeAddPeriodTarget-->result: " + periodTargetResult + ".");
-                if(!periodTargetResult){
+            if(obj.id == 0){
+                obj.themeId = themeResult;
+                targetResult = exeAddTarget(obj, thisObj, sql);
+                console.log("exeAddTarget-->result: " + targetResult + ".");
+                if (periodResult && targetResult) {
+                    periodTarget.periodId = periodResult;
+                    periodTarget.targetId = targetResult;
+                    periodTargetResult = exeAddPeriodTarget(periodTarget, thisObj, sql);
+                    console.log("exeAddPeriodTarget-->result: " + periodTargetResult + ".");
+                    if(!periodTargetResult){
+                        break;
+                    }
+                } else {
                     break;
                 }
-            } else {
-                break;
             }
         }
     } else {

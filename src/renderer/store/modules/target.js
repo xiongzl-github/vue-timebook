@@ -19,6 +19,9 @@ const state = {
         todoStyle:'ghost',
         doneStyle:'ghost',
         current: 0,
+        doingTargets:[],
+        todoTargets:[],
+        doneTargets:[]
     },
     period: {
         id: 0,
@@ -34,10 +37,6 @@ const state = {
         updateTime: '',
         syncStatus: 0,
         status: 1,
-        doingTargets:[],
-        todoTargets:[],
-        doneTargets:[],
-        
     },
     periodTarget: {
         id: 0,
@@ -154,7 +153,8 @@ const actions = {
 
 const mutations = {
     [types.QUERYDOINGTARGET](state, data){
-        state.target.doingTargets = data;
+        state.theme.doingTargets.length = 0;
+        state.theme.doingTargets = data;
     },
     [types.ADDTARGET](state){
         // let target = state.target;

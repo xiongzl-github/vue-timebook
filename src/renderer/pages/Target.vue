@@ -6,20 +6,20 @@
                 <div class="Target-Left">
                     <div style="width:auto;height:45px">
                         <ButtonGroup style="float:left">
-                            <Button @click="queryDoingTarget()" style="border-radius:0;width:101px" :type="target.doingStyle">Doing</Button>
-                            <Button style="border-radius:0;width:100px" :type="target.todoStyle">ToDo</Button>
-                            <Button style="border-radius:0;width:101px" :type="target.doneStyle">Done</Button>
+                            <Button @click="queryDoingTarget()" style="border-radius:0;width:101px" :type="theme.doingStyle">Doing</Button>
+                            <Button style="border-radius:0;width:100px" :type="theme.todoStyle">ToDo</Button>
+                            <Button style="border-radius:0;width:101px" :type="theme.doneStyle">Done</Button>
                         </ButtonGroup>
                     </div>
                     <div id="Target-Left-TimeLine" style="width:302px; padding:8px;text-align:left;height:555px;">
                         <Timeline style="width:auto;height:545px;">
-                            <span v-if='target.doingStyle == "primary"'>
+                            <span v-if='theme.doingStyle == "primary"'>
                                 
                             </span>
-                            <span v-if='target.todoStyle == "primary"'>
+                            <span v-if='theme.todoStyle == "primary"'>
 
                             </span>
-                            <span v-if='target.doneStyle == "primary"'>
+                            <span v-if='theme.doneStyle == "primary"'>
 
                             </span>
                         </Timeline>
@@ -488,7 +488,7 @@ export default {
         Scrollbar.init(document.querySelector("#Target-Step-Third"));
         Scrollbar.init(document.querySelector("#Target-Step-Second-ChildTarget"));
         Scrollbar.init(document.querySelector("#Target-ChildTargetModal"));
-        // this.queryDoingTarget();
+        this.queryDoingTarget();
         if(this.theme.current != 0) {
             this.nextStep(this.theme.current);
         }
