@@ -202,11 +202,11 @@
                                 </div>
                             </Modal>
 
-                            <Modal :mask-closable="false" v-model="theme.deleteTargetOrPeriodModal" title="删除主题或者当前期数" :styles="{top: '300px'}" @on-ok="" @on-cancel="">
-                                <div style="height:150px">
-                                    <RadioGroup v-model="period.isCompleted" style="font-size: 22px;font-weight: 500;">
-                                        <Radio style="display:block" label="1" value="1">删除当前主题</Radio>
-                                        <Radio style="display:block" label="0" value="0">删除当前期数</Radio>
+                            <Modal :mask-closable="false" v-model="theme.deleteTargetOrPeriodModal" title="删除主题或者当前期数" :styles="{top: '300px', width:'400px', height:'200px'}" @on-ok="deleteThemeOrPeriod" @on-cancel="">
+                                <div style="height:80px;padding-top:20px">
+                                    <RadioGroup v-model="theme.deleteTargetOrPeriodModalId">
+                                        <Radio style="display:block;font-size: 16px;font-weight: 500;" label="1" value="1">删除当前期数</Radio>
+                                        <Radio style="display:block;font-size: 16px;font-weight: 500;" label="0" value="0">删除当前主题</Radio>
                                     </RadioGroup>
                                 </div>
                                 
@@ -240,12 +240,19 @@ export default {
     },
 
     methods: {
-        deleteThemeOrPeriod(themeId, periodId){
+        deleteThemeOrPeriod(){
+            if(this.theme.deleteTargetOrPeriodModalId == 0) {
+                // 表示删除的是主题
+            } else {
+                // 表示删除的是期数
+            }
+        },
+        showDeleteThemeOrPeriodModal(themeId, periodId){
+            this.theme.deleteTargetOrPeriodModal = true;
+            this.theme.deleteTargetOrPeriodModalOfThemeId = themeId;
+            this.theme.deleteTargetOrPeriodModalOfPeriodId = periodId;
             console.log(themeId);
             console.log(periodId);
-        },
-        showDeleteThemeOrPeriodModal(){
-            this.theme.deleteTargetOrPeriodModal = true;
         },
         queryDoingTarget(){
             this.$store.dispatch({

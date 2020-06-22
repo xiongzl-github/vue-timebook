@@ -2,7 +2,9 @@ import types from "../types.js";
 import * as util from "@/utils/util";
 import * as dbUtil from "@/utils/dbUtil";
 import * as targetUtil from "@/utils/targetUtil";
-import { url } from "inspector";
+import {
+    url
+} from "inspector";
 
 const state = {
     theme: {
@@ -14,15 +16,18 @@ const state = {
         updateTime: '',
         syncStatus: 0,
         status: 1,
-        childTargetsModal:false,
-        deleteTargetOrPeriodModal:false,
-        doingStyle:'primary',
-        todoStyle:'ghost',
-        doneStyle:'ghost',
+        childTargetsModal: false,
+        deleteTargetOrPeriodModal: false,
+        deleteTargetOrPeriodModalOfThemeId: 0,
+        deleteTargetOrPeriodModalOfPeriodId: 0,
+        deleteTargetOrPeriodModalId: 1,
+        doingStyle: 'primary',
+        todoStyle: 'ghost',
+        doneStyle: 'ghost',
         current: 0,
-        doingTargets:[],
-        todoTargets:[],
-        doneTargets:[]
+        doingTargets: [],
+        todoTargets: [],
+        doneTargets: []
     },
     period: {
         id: 0,
@@ -49,34 +54,34 @@ const state = {
         syncStatus: 0,
         status: 1
     },
-    childTarget:{
+    childTarget: {
         id: 0,
         userId: 0,
-        target: '',     // 目标
-        themeId: 0,             // 父 ID
-        consumeTime: 0,     // 耗费时间
-        totalTime: 0,       // 总耗时
-        curDateTime: new Date(),    // 当前时间
-        updateTime: '',             // 更新时间
-        syncStatus: 0,              // 同步状态
-        status: 1,                  // 状态
-        show: 1,                    // 是否显示
-        childTargets:[]
+        target: '', // 目标
+        themeId: 0, // 父 ID
+        consumeTime: 0, // 耗费时间
+        totalTime: 0, // 总耗时
+        curDateTime: new Date(), // 当前时间
+        updateTime: '', // 更新时间
+        syncStatus: 0, // 同步状态
+        status: 1, // 状态
+        show: 1, // 是否显示
+        childTargets: []
     },
-    childTargets:[],
+    childTargets: [],
     target: {
         id: 0,
         userId: 0,
-        target: '',     // 目标
-        themeId: 0,             // 父 ID
-        consumeTime: 0,     // 耗费时间
-        totalTime: 0,       // 总耗时
-        curDateTime: new Date(),    // 当前时间
-        updateTime: '',             // 更新时间
-        syncStatus: 0,              // 同步状态
-        status: 1,                  // 状态
-        show: 1,                    // 是否显示
-        childTargets:[]
+        target: '', // 目标
+        themeId: 0, // 父 ID
+        consumeTime: 0, // 耗费时间
+        totalTime: 0, // 总耗时
+        curDateTime: new Date(), // 当前时间
+        updateTime: '', // 更新时间
+        syncStatus: 0, // 同步状态
+        status: 1, // 状态
+        show: 1, // 是否显示
+        childTargets: []
     }
 };
 
@@ -96,76 +101,121 @@ const getters = {
     childTarget(state) {
         return state.childTarget;
     },
-    childTargets(state){
+    childTargets(state) {
         return state.childTargets;
     }
 };
 
 const actions = {
-    resetTarget({ commit, state }, obj) {
+    resetTarget({
+        commit,
+        state
+    }, obj) {
         commit(types.RESETTARGET, obj.timeMachine);
     },
-    updateTarget({ commit, state }, obj) {
+    updateTarget({
+        commit,
+        state
+    }, obj) {
         targetUtil.updateTarget(state.target, obj.timeMachine, obj.thisObj);
         commit(types.UPDATETARGET, obj);
     },
-    setTargetInfo({ commit, state }, obj) {
+    setTargetInfo({
+        commit,
+        state
+    }, obj) {
         commit(types.SETTARGETINFO, obj);
     },
-    deleteTargetById({ commit, state }, obj) {
+    deleteTargetById({
+        commit,
+        state
+    }, obj) {
         let resultList = targetUtil.deleteTargetById(obj.id, obj.thisObj);
     },
-    queryAllTarget({ commit, state }, obj) {
+    queryAllTarget({
+        commit,
+        state
+    }, obj) {
         let resultList = targetUtil.queryTargets(obj.status);
         commit(types.QUERYALLTARGET, resultList);
     },
-    submitTarget({ commit, state }, obj) {
+    submitTarget({
+        commit,
+        state
+    }, obj) {
         targetUtil.submitTarget(state.target, obj.timeMachine, obj.thisObj);
     },
-    addChildTarget({commit, state}, obj) {
+    addChildTarget({
+        commit,
+        state
+    }, obj) {
         commit(types.ADDCHILDTARGET, obj);
     },
-    addCheckPoint({commit, state}, obj) {
+    addCheckPoint({
+        commit,
+        state
+    }, obj) {
         commit(types.ADDCHECKPOINT, obj);
     },
-    deleteCheckPoint({commit, state}, obj) {
+    deleteCheckPoint({
+        commit,
+        state
+    }, obj) {
         commit(types.DELETECHECKPOINT, obj);
     },
-    viewCheckPointDetail({commit, state}, obj) {
+    viewCheckPointDetail({
+        commit,
+        state
+    }, obj) {
         commit(types.VIEWCHECKPOINTDETAIL, obj);
     },
-    showChildTargetModal({commit, state}, obj) {
+    showChildTargetModal({
+        commit,
+        state
+    }, obj) {
         commit(types.SHOWCHILDTARGETMODAL, obj);
     },
-    resetChildTarget({commit, state}, obj) {
+    resetChildTarget({
+        commit,
+        state
+    }, obj) {
         commit(types.RESETCHILDTARGET);
     },
-    viewChildTargetDetail({commit, state}, obj) {
+    viewChildTargetDetail({
+        commit,
+        state
+    }, obj) {
         commit(types.VIEWCHILDTARGETDETAIL);
     },
-    addTarget({commit, state}, obj){
+    addTarget({
+        commit,
+        state
+    }, obj) {
         targetUtil.addTarget(state, obj.thisObj);
     },
-    queryDoingTarget({commit, state}, obj){
+    queryDoingTarget({
+        commit,
+        state
+    }, obj) {
         let resultList = targetUtil.queryDoingTarget(state.target, obj.thisObj);
         commit(types.QUERYDOINGTARGET, resultList);
     }
 };
 
 const mutations = {
-    [types.QUERYDOINGTARGET](state, data){
+    [types.QUERYDOINGTARGET](state, data) {
         state.theme.doingTargets.length = 0;
         state.theme.doingTargets = data;
     },
-    [types.ADDTARGET](state){
+    [types.ADDTARGET](state) {
         // let target = state.target;
     },
-    [types.ADDCHILDTARGET](state, data){
+    [types.ADDCHILDTARGET](state, data) {
         let target = state.target;
         let childTarget = state.childTarget;
         target.childTargets.push(JSON.parse(JSON.stringify(childTarget)));
     },
-    [types.RESETTARGET](state, timeMachine){
+    [types.RESETTARGET](state, timeMachine) {
         let target = state.target;
         target.target = "";
         timeMachine.tags.splice(0, timeMachine.tags.length);
