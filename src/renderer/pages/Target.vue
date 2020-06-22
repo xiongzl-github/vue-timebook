@@ -11,18 +11,18 @@
                             <Button style="border-radius:0;width:101px" :type="theme.doneStyle">Done</Button>
                         </ButtonGroup>
                     </div>
-                    <div id="Target-Left-TimeLine" style="width:302px; padding:8px;text-align:left;height:555px;">
-                        <Timeline style="width:auto;height:545px;">
-                            <span v-if='theme.doingStyle == "primary"'>
-                                
-                            </span>
-                            <span v-if='theme.todoStyle == "primary"'>
-
-                            </span>
-                            <span v-if='theme.doneStyle == "primary"'>
-
-                            </span>
-                        </Timeline>
+                    <div id="Target-Left-TimeLine" style="width:312px;text-align:left;height:555px;">
+                        <div style="width:312px;height:555px" id="Left-Target-List" v-if='theme.doingStyle == "primary"'>
+                            <div v-for="(item, index) in theme.doingTargets" :key="index" style="padding:5px;width:302px;height:50px;display:inline-block:float:left">
+                                <img style="width:40px;height:40px;float:left;margin-right:10px;display:inline-block" src="../assets/img/target.png" alt="">
+                                <img @click="showDeleteThemeOrPeriodModal(item.themeId, item.periodId)" style="width:40px;height:40px;float:right;display:inline-block" src="../assets/img/delete.png" alt="">
+                                <strong style="font-size:14px;width:192px;display:inline-block;margin-right:10px">{{item.theme}}--{{item.target}}</strong>
+                                <span style="width:192px;display:inline-block;margin-right:10px">
+                                    <el-tag style="margin-right:10px;color:#fff;background:#2D8CF0" effect="dark" size='mini'>第{{item.period}}期</el-tag>
+                                    <strong style="font-size:12px">还剩&nbsp<span style="color:red">{{item.remainDays}}</span>&nbsp天</strong>
+                                </span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -201,6 +201,16 @@
                                     </div>
                                 </div>
                             </Modal>
+
+                            <Modal :mask-closable="false" v-model="theme.deleteTargetOrPeriodModal" title="删除主题或者当前期数" :styles="{top: '300px'}" @on-ok="" @on-cancel="">
+                                <div style="height:150px">
+                                    <RadioGroup v-model="period.isCompleted" style="font-size: 22px;font-weight: 500;">
+                                        <Radio style="display:block" label="1" value="1">删除当前主题</Radio>
+                                        <Radio style="display:block" label="0" value="0">删除当前期数</Radio>
+                                    </RadioGroup>
+                                </div>
+                                
+                            </Modal>
                         </div>
                     </div>
                 </div>
@@ -230,6 +240,13 @@ export default {
     },
 
     methods: {
+        deleteThemeOrPeriod(themeId, periodId){
+            console.log(themeId);
+            console.log(periodId);
+        },
+        showDeleteThemeOrPeriodModal(){
+            this.theme.deleteTargetOrPeriodModal = true;
+        },
         queryDoingTarget(){
             this.$store.dispatch({
                 type: 'queryDoingTarget',

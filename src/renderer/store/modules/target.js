@@ -15,6 +15,7 @@ const state = {
         syncStatus: 0,
         status: 1,
         childTargetsModal:false,
+        deleteTargetOrPeriodModal:false,
         doingStyle:'primary',
         todoStyle:'ghost',
         doneStyle:'ghost',

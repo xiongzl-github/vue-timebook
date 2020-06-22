@@ -20,11 +20,12 @@ export function queryDoingTarget(target, thisObj){
     let resultList = [];
     let sql = dbUtil.getSqlObj();
     let userId = wsCache.get("user").id;
-    let sqlStr = "SELECT a.id AS themeId, a.theme, a.target, b.id AS periodId, b.period, b.priority FROM tbl_theme a LEFT JOIN tbl_period b ON a.id = b.themeId WHERE a.userId = " + userId + " and a.status = 1 AND b.status = 1 AND b.isCompleted = 0 AND b.planning = 1 ORDER BY b.priority asc";
+    let sqlStr = "SELECT a.id AS themeId, a.theme, a.target, b.id AS periodId, b.period, b.priority, b.deadline FROM tbl_theme a LEFT JOIN tbl_period b ON a.id = b.themeId WHERE a.userId = " + userId + " and a.status = 1 AND b.status = 1 AND b.isCompleted = 0 AND b.planning = 1 ORDER BY b.priority asc";
     console.log(sqlStr);
     let stmt = sql.prepare(sqlStr);
     while (stmt.step()) {
         let targetObj = stmt.getAsObject();
+        targetObj.remainDays = util.DateMinus(targetObj.deadline);
         resultList.push(targetObj);
     }
     console.log("queryDoingTarget");
@@ -106,6 +107,10 @@ export function addTarget(state, thisObj){
         dbUtil.writeDataToDB(sql);
         thisObj.$Message.success({
             content: "添加成功!"
+        });
+    } else {
+        thisObj.$Message.error({
+            content: "添加失败!"
         });
     }
 }

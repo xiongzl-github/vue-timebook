@@ -3,6 +3,26 @@ import { screen } from "electron";
 import path from "path";
 import { remote } from "electron";
 
+
+
+/**
+ * 日期相减
+ *
+ * @export
+ * @param {*} sDate
+ * @returns
+ */
+export function DateMinus(sDate){
+　　 var sdate = new Date(sDate);
+　　 var now = new Date();
+　　 var days = sdate.getTime() - now.getTime();
+　　 var day = parseInt(days / (1000 * 60 * 60 * 24));
+　　 return day;
+}
+
+
+
+
 export function sleep(n) {
     var start = new Date().getTime();
     while (true) {
