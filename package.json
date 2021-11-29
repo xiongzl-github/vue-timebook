@@ -65,7 +65,7 @@
     "jspdf": "^1.4.1",
     "less": "^3.0.1",
     "less-loader": "^4.1.0",
-    "mavon-editor": "^2.6.17",
+    "mavon-editor": "^2.8.2",
     "nedb": "^1.8.0",
     "newman": "^4.5.5",
     "node-cmd": "^3.0.0",
